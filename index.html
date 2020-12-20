@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>speak</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+  <div id="app">
+    <form @submit.prevent="speak">
+      <div class="form-row">
+        <label for="voices">Voices</label>
+        <select name="voices" v-model="voiceURI">
+          <option disabled value="null">
+            Please select a voice
+          </option>
+          <option
+            v-for="voice in voices"
+            :value="voice.voiceURI"
+            :key="voice.voiceURI"
+          >
+            {{ voice.name }} ({{ voice.lang }})
+          </option>
+        </select>
+      </div>
+      <div class="form-row">
+        <textarea
+          v-model="text"
+          name="text"
+          placeholder="What would you like me to say?"
+        ></textarea>
+      </div>
+      <div class="form-row">
+        <button
+          type="submit"
+          :disabled="voiceURI === null"
+        >
+          Speak
+        </button>
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+
+  var vm = new Vue({
+    el: '#app',
+    data: {
+      voicesReady: false,
+      synth: window.speechSynthesis,
+      voiceURI: null,
+      text: "",
+    },
+    computed: {
+      voices: function () {
+        this.voicesReady
+        return this.synth.getVoices()
+      },
+      voice: function () {
+        return this.voices.find(v => v.voiceURI === this.voiceURI)
+      }
+    },
+    methods: {
+      speak: function () {
+        var utterance = new SpeechSynthesisUtterance(this.text)
+        utterance.voice = this.voice
+
+        this.synth.speak(utterance)
+      }
+    }
+  })
+
+  window.speechSynthesis.onvoiceschanged = e => {
+    vm.voicesReady = e
+  }
+  
+</script>`

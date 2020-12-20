@@ -1,0 +1,25 @@
+body {
+    height: 100vm;
+    margin: 0;
+    padding: 0;
+}
+
+#app {
+    height: 100vm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+
+}
+
+.form-row {
+    margin: 1rem;
+}
+
+[name="text"] {
+    width: 100%;
+}
